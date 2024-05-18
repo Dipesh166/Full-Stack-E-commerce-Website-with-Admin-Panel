@@ -1,4 +1,4 @@
-import { Product, User } from "./types";
+import { CartItem, Product, ShippingInfo, User } from "./types";
 
 export type CustomError={
     status:number;
@@ -88,6 +88,19 @@ export type DeleteProductRequest= {
     productId:string;
     
 }
+
+
+
+export type NewOrderRequest= {
+    shippingInfo:ShippingInfo;
+    cartItems:CartItem[];
+    subtotal:number;
+    tax:number;
+    shippingCharges:number;
+    discount:number;
+    total:number;
+    user:string;
+};
 
 
 

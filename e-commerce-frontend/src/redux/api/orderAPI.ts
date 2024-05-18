@@ -1,17 +1,24 @@
-import { createAction } from "@reduxjs/toolkit";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { MessageResponse, NewOrderRequest } from "../../types/api-types";
 
 
-export const orderpi = createApi({
+
+export const orderApi = createApi ({
     reducerPath:"orderApi",
-    basequery:fetchBaseQuery({  baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/order/`,}),
-    endpoints:(builder)=>({
-        mewOrder:builder.mutation({
-           query:()=>({url:"new", method:"POST", body:order})
-        })
+    baseQuery: fetchBaseQuery({  
+        baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/order/`,
     }),
+    endpoints:(builder)=>({
+        newOrder:builder.mutation<MessageResponse, NewOrderRequest>({
+            query:(order)=>({url:"new", method:"POST",body:order})
+        }),
+        myOrders:builder.mutation<MessageResponse, string>({
+            query:(order)=>({url:"new", method:"POST",body:order})
+        }),
+    }),
+
 
 })
 
 
-export const {useNewOrder} = orderApi
+export const { } =orderApi
