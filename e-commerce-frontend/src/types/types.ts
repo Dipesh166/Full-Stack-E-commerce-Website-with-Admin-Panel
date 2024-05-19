@@ -30,7 +30,7 @@ export type ShippingInfo ={
     city:string;
     state:string;
     country:string;
-    pinCode:string;
+    pincode:string;
     
 
 

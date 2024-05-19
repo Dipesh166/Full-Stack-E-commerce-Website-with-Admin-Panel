@@ -1,6 +1,11 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
 import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { NewOrderRequest } from '../types/api-types';
+import { useSelector } from 'react-redux';
+import { RootState } from '@reduxjs/toolkit/query';
 
 
 
@@ -11,27 +16,57 @@ const CheckOutForm= () =>{
     const stripe = useStripe()
     const elements  = useElements()
 
-    const [isProcessing, setisProcessing] = useState<boolean>(false)
+    const navigate = useNavigate()
 
-    const submitHandler = (e:FormEvent<HTMLFormElement>) =>{
+    const {user}= useSelector((state:RootState)=> state.userReducer)
+    const [isProcessing, setIsProcessing] = useState<boolean>(false)
+
+    const submitHandler = async(e:FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
         if(!stripe || !elements) return;
 
-        setisProcessing(true)
-        setTimeout(()=>{
+        setIsProcessing(true)
+        
 
-            setisProcessing(false)
+        const orderData:NewOrderRequest ={
 
-        }, 2000)
+        };
+        
+       const {paymentIntent, error} = await stripe.confirmPayment({
+            elements,
+            confirmParams:{return_url:window.location.origin},
+            redirect:"if_required",
 
-        const order ={};
+        
+        });
+
+        if(error)  {
+
+            setIsProcessing(false)
+
+            return toast.error(error.message || "Something went Wrong")
+
+        }
+        
+        if(paymentIntent.status ==="succeeded"){
+        console.log("Placing Order")
+
+        navigate("/orders")
+      }
+      setIsProcessing(false)
+
+
+
+        
+
+
     };
     return <div className='checkout-container'>
        <form onSubmit={submitHandler}>
         <PaymentElement/>
 
-        <button>
+        <button type='submit' disabled={isProcessing}>
             {isProcessing? "Processing..." :"Pay"}
         </button>
 
@@ -42,9 +77,15 @@ const CheckOutForm= () =>{
 
 
 const Checkout = () => {
+
+    const location = useLocation();
+
+    const clientSecret:string | undefined = location.state
+
+    if(!clientSecret) <Navigate to={"/shipping"}/>
   return (
     <Elements  options={{
-        clientSecret:"pi_3PIMA2SJMg2crfYp1acoACFh_secret_2HkQwONUNDHtHnU3zRgE3Bbjg",
+        clientSecret,
     }} stripe={stripePromise}>
         <CheckOutForm/>
     </Elements>
