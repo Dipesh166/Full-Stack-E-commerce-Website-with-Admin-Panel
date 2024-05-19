@@ -119,7 +119,7 @@ export type AllOrdersResponse ={
 
 export type OrderDetailsResponse ={
     success:boolean;
-    orders: Order;
+    order: Order;
 }
 
 

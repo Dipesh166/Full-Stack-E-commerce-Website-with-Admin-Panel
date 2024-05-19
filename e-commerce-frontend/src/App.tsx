@@ -15,12 +15,15 @@ import ProtectedRoute from "./components/protected-route";
 
 
 
+
 const Search = lazy(()=>import("./pages/search"));
 const Home =lazy(()=>import("./pages/home"));
 const Cart =lazy(()=>import("./pages/cart"));
 const Shipping=lazy(()=>import("./pages/shipping"));
 const Login=lazy(()=>import("./pages/login"));
 const Orders=lazy(()=>import("./pages/orders"));
+
+const NotFound =lazy(()=>import ( "./pages/not-found"));
 
 
 
@@ -130,7 +133,9 @@ element={
 <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
 </Route>;
 
+<Route  path="*"  element={< NotFound/>} />
 </Routes>
+
 </Suspense>
 <Toaster position="bottom-center"/>
 
