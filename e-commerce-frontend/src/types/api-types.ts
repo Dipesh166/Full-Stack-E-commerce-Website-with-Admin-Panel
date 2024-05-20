@@ -93,7 +93,7 @@ export type DeleteProductRequest= {
 
 export type NewOrderRequest= {
     shippingInfo:ShippingInfo;
-    cartItems:CartItem[];
+    orderItems:CartItem[];
     subtotal:number;
     tax:number;
     shippingCharges:number;
@@ -121,7 +121,6 @@ export type OrderDetailsResponse ={
     success:boolean;
     order: Order;
 }
-
 
 
 
